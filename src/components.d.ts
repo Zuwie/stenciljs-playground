@@ -26,6 +26,12 @@ export namespace Components {
          */
         "initialCount": number;
     }
+    interface ProgressBar {
+    }
+}
+export interface ProgressBarCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLProgressBarElement;
 }
 declare global {
     interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {
@@ -40,9 +46,27 @@ declare global {
         prototype: HTMLNumberCounterElement;
         new (): HTMLNumberCounterElement;
     };
+    interface HTMLProgressBarElementEventMap {
+        "progressMax": void;
+    }
+    interface HTMLProgressBarElement extends Components.ProgressBar, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLProgressBarElementEventMap>(type: K, listener: (this: HTMLProgressBarElement, ev: ProgressBarCustomEvent<HTMLProgressBarElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLProgressBarElementEventMap>(type: K, listener: (this: HTMLProgressBarElement, ev: ProgressBarCustomEvent<HTMLProgressBarElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLProgressBarElement: {
+        prototype: HTMLProgressBarElement;
+        new (): HTMLProgressBarElement;
+    };
     interface HTMLElementTagNameMap {
         "my-component": HTMLMyComponentElement;
         "number-counter": HTMLNumberCounterElement;
+        "progress-bar": HTMLProgressBarElement;
     }
 }
 declare namespace LocalJSX {
@@ -66,9 +90,13 @@ declare namespace LocalJSX {
          */
         "initialCount"?: number;
     }
+    interface ProgressBar {
+        "onProgressMax"?: (event: ProgressBarCustomEvent<void>) => void;
+    }
     interface IntrinsicElements {
         "my-component": MyComponent;
         "number-counter": NumberCounter;
+        "progress-bar": ProgressBar;
     }
 }
 export { LocalJSX as JSX };
@@ -77,6 +105,7 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
             "number-counter": LocalJSX.NumberCounter & JSXBase.HTMLAttributes<HTMLNumberCounterElement>;
+            "progress-bar": LocalJSX.ProgressBar & JSXBase.HTMLAttributes<HTMLProgressBarElement>;
         }
     }
 }
