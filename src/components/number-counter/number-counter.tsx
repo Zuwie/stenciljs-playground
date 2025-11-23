@@ -8,7 +8,7 @@ import { Component, Fragment, h, Prop, State } from "@stencil/core";
 export class NumberCounter {
 	@Prop() initialCount: number = 0;
 	@State() count: number = this.initialCount;
-
+ 
 	increment() {
 		this.count++;
 	}
