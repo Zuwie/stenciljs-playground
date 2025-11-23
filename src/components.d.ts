@@ -5,6 +5,8 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { DrawerPosition } from "./components/my-drawer/my-drawer";
+export { DrawerPosition } from "./components/my-drawer/my-drawer";
 export namespace Components {
     interface MyComponent {
         /**
@@ -20,6 +22,65 @@ export namespace Components {
          */
         "middle": string;
     }
+    interface MyDrawer {
+        /**
+          * Closes the drawer
+         */
+        "closeDrawer": () => Promise<void>;
+        /**
+          * Whether pressing Escape key closes the drawer
+          * @default true
+         */
+        "closeOnEscape": boolean;
+        /**
+          * Whether clicking the overlay closes the drawer
+          * @default true
+         */
+        "closeOnOverlayClick": boolean;
+        /**
+          * Custom CSS class for the drawer content
+          * @default ''
+         */
+        "drawerClass": string;
+        /**
+          * Height of the drawer (for top/bottom positions)
+          * @default '320px'
+         */
+        "height": string;
+        /**
+          * Whether the drawer is open
+          * @default false
+         */
+        "open": boolean;
+        /**
+          * Opens the drawer
+         */
+        "openDrawer": () => Promise<void>;
+        /**
+          * Custom CSS class for the overlay
+          * @default ''
+         */
+        "overlayClass": string;
+        /**
+          * Position of the drawer
+          * @default 'left'
+         */
+        "position": DrawerPosition;
+        /**
+          * Whether to show the overlay backdrop
+          * @default true
+         */
+        "showOverlay": boolean;
+        /**
+          * Toggles the drawer open/closed state
+         */
+        "toggle": () => Promise<void>;
+        /**
+          * Width of the drawer (for left/right positions)
+          * @default '320px'
+         */
+        "width": string;
+    }
     interface NumberCounter {
         /**
           * @default 0
@@ -28,6 +89,10 @@ export namespace Components {
     }
     interface ProgressBar {
     }
+}
+export interface MyDrawerCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLMyDrawerElement;
 }
 export interface ProgressBarCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -39,6 +104,25 @@ declare global {
     var HTMLMyComponentElement: {
         prototype: HTMLMyComponentElement;
         new (): HTMLMyComponentElement;
+    };
+    interface HTMLMyDrawerElementEventMap {
+        "drawerOpened": void;
+        "drawerClosed": void;
+        "drawerToggle": boolean;
+    }
+    interface HTMLMyDrawerElement extends Components.MyDrawer, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLMyDrawerElementEventMap>(type: K, listener: (this: HTMLMyDrawerElement, ev: MyDrawerCustomEvent<HTMLMyDrawerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLMyDrawerElementEventMap>(type: K, listener: (this: HTMLMyDrawerElement, ev: MyDrawerCustomEvent<HTMLMyDrawerElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLMyDrawerElement: {
+        prototype: HTMLMyDrawerElement;
+        new (): HTMLMyDrawerElement;
     };
     interface HTMLNumberCounterElement extends Components.NumberCounter, HTMLStencilElement {
     }
@@ -65,6 +149,7 @@ declare global {
     };
     interface HTMLElementTagNameMap {
         "my-component": HTMLMyComponentElement;
+        "my-drawer": HTMLMyDrawerElement;
         "number-counter": HTMLNumberCounterElement;
         "progress-bar": HTMLProgressBarElement;
     }
@@ -84,6 +169,65 @@ declare namespace LocalJSX {
          */
         "middle"?: string;
     }
+    interface MyDrawer {
+        /**
+          * Whether pressing Escape key closes the drawer
+          * @default true
+         */
+        "closeOnEscape"?: boolean;
+        /**
+          * Whether clicking the overlay closes the drawer
+          * @default true
+         */
+        "closeOnOverlayClick"?: boolean;
+        /**
+          * Custom CSS class for the drawer content
+          * @default ''
+         */
+        "drawerClass"?: string;
+        /**
+          * Height of the drawer (for top/bottom positions)
+          * @default '320px'
+         */
+        "height"?: string;
+        /**
+          * Event emitted when drawer closes
+         */
+        "onDrawerClosed"?: (event: MyDrawerCustomEvent<void>) => void;
+        /**
+          * Event emitted when drawer opens
+         */
+        "onDrawerOpened"?: (event: MyDrawerCustomEvent<void>) => void;
+        /**
+          * Event emitted when drawer open state changes
+         */
+        "onDrawerToggle"?: (event: MyDrawerCustomEvent<boolean>) => void;
+        /**
+          * Whether the drawer is open
+          * @default false
+         */
+        "open"?: boolean;
+        /**
+          * Custom CSS class for the overlay
+          * @default ''
+         */
+        "overlayClass"?: string;
+        /**
+          * Position of the drawer
+          * @default 'left'
+         */
+        "position"?: DrawerPosition;
+        /**
+          * Whether to show the overlay backdrop
+          * @default true
+         */
+        "showOverlay"?: boolean;
+        /**
+          * Width of the drawer (for left/right positions)
+          * @default '320px'
+         */
+        "width"?: string;
+    }
     interface NumberCounter {
         /**
           * @default 0
@@ -95,6 +239,7 @@ declare namespace LocalJSX {
     }
     interface IntrinsicElements {
         "my-component": MyComponent;
+        "my-drawer": MyDrawer;
         "number-counter": NumberCounter;
         "progress-bar": ProgressBar;
     }
@@ -104,6 +249,7 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
+            "my-drawer": LocalJSX.MyDrawer & JSXBase.HTMLAttributes<HTMLMyDrawerElement>;
             "number-counter": LocalJSX.NumberCounter & JSXBase.HTMLAttributes<HTMLNumberCounterElement>;
             "progress-bar": LocalJSX.ProgressBar & JSXBase.HTMLAttributes<HTMLProgressBarElement>;
         }

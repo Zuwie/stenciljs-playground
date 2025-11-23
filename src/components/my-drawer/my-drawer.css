@@ -1,0 +1,168 @@
+:host {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+:host([open]) {
+  pointer-events: auto;
+}
+
+.drawer-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  pointer-events: none;
+}
+
+.overlay--visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.drawer {
+  position: absolute;
+  background-color: #ffffff;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s ease-in-out;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Left position */
+.drawer--left {
+  top: 0;
+  left: 0;
+  transform: translateX(-100%);
+}
+
+.drawer--left.drawer--open {
+  transform: translateX(0);
+}
+
+/* Right position */
+.drawer--right {
+  top: 0;
+  right: 0;
+  transform: translateX(100%);
+}
+
+.drawer--right.drawer--open {
+  transform: translateX(0);
+}
+
+/* Top position */
+.drawer--top {
+  top: 0;
+  left: 0;
+  transform: translateY(-100%);
+}
+
+.drawer--top.drawer--open {
+  transform: translateY(0);
+}
+
+/* Bottom position */
+.drawer--bottom {
+  bottom: 0;
+  left: 0;
+  transform: translateY(100%);
+}
+
+.drawer--bottom.drawer--open {
+  transform: translateY(0);
+}
+
+.drawer-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0;
+}
+
+/* Focus styles for accessibility */
+.drawer:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: -2px;
+}
+
+/* Scrollbar styling */
+.drawer-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.drawer-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.drawer-content::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.drawer-content::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .drawer {
+    background-color: #1f2937;
+    color: #f9fafb;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  }
+
+  .drawer-content::-webkit-scrollbar-track {
+    background: #374151;
+  }
+
+  .drawer-content::-webkit-scrollbar-thumb {
+    background: #6b7280;
+  }
+
+  .drawer-content::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .drawer--left,
+  .drawer--right {
+    width: 100% !important;
+  }
+
+  .drawer--top,
+  .drawer--bottom {
+    height: 80vh !important;
+  }
+}
+
+/* Animation performance optimization */
+.drawer {
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+
+.overlay {
+  will-change: opacity;
+}
